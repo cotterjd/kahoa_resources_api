@@ -25,7 +25,7 @@ const testCreateDev = () => {
        },
        body: JSON.stringify({
          name: "John",
-         email: "john6@gmail.com",
+         email: "john7@gmail.com",
          skills: { cSharp: 9 },
        }),
      }).then(r => r.json()).then(resolve).catch(reject) 
@@ -42,6 +42,38 @@ const testListDevs = () => {
      }).then(r => r.json()).then(resolve).catch(reject) 
   })
 }
+const testBadPut = (id) => {
+  console.log(`Testing PUT /devs`)
+  return new Promise((resolve, reject) => {
+     fetch(`http://localhost:4000/devs/foo`, {
+       method: `PUT`,
+       headers: {
+         'Content-Type': `application/json`,
+       },
+       body: JSON.stringify({
+         skills: {
+           python: 3
+         }
+       }),
+     }).then(r => r.json()).then(resolve).catch(reject) 
+  })
+}
+const testPutDev = (id) => {
+  console.log(`Testing PUT /devs`)
+  return new Promise((resolve, reject) => {
+     fetch(`http://localhost:4000/devs/${id}`, {
+       method: `PUT`,
+       headers: {
+         'Content-Type': `application/json`,
+       },
+       body: JSON.stringify({
+         skills: {
+           python: 3
+         }
+       }),
+     }).then(r => r.json()).then(resolve).catch(reject) 
+  })
+}
 const testDeleteDev = (id) => {
   console.log(`Testing DELETE /devs`)
   return new Promise((resolve, reject) => {
@@ -52,7 +84,7 @@ const testDeleteDev = (id) => {
 }
 
 
-let devId = null
+let devId = 13 
 function runTests () {
   testServer()
     .then(res => {
@@ -81,6 +113,22 @@ function runTests () {
          assert.ok(devs.length > 1)
          printGreen(`passed`)
      })
+     .then(_ => testBadPut(devId))
+     .then(res => {
+       // console.log(res)
+       assert.ok(!res.id)
+       assert.ok(res.error)
+       assert.equal(res.error, `Invalid id of "foo"`)
+       printGreen(`passed`)
+     })
+     .then(_ => testPutDev(devId))
+     .then(updatedDev => {
+       // console.log(updatedDev)
+       assert.ok(updatedDev.id)
+       assert.ok(updatedDev.skills)
+       assert.equal(updatedDev.skills.python, 3)
+       printGreen(`passed`)
+     })
      .then(_ => testDeleteDev(devId))
      .then(res => {
          assert.ok(res)
@@ -88,6 +136,10 @@ function runTests () {
          printGreen(`passed`)
      })
      .catch(printRed)
+     .finally(_ => {
+       // clean up
+       testDeleteDev(devId)
+     })
 }
 
 runTests()

@@ -27,7 +27,20 @@ async function create (req, res) {
   }
 }
 
+async function update (req, res) {
+  const id = req.params.id
+  const numId = Number(req.params.id)
+  if (isNaN(numId)) return res.status(400).json({ error: `Invalid id of "${id}"`})
+  try {
+    const data = await dev.update(req.params.id, req.body)
+    res.json(data)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: `Error trying to update dev` })
+  }
+}
+
 export default {
-  dev: { list, del, create }
+  dev: { list, del, create, update }
 }
 

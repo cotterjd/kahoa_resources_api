@@ -1,4 +1,5 @@
-import { PrismaClient } from ".prisma/client";
+// import Prisma from '@prisma/client'
+import { PrismaClient, Prisma } from ".prisma/client";
 import { dissoc } from 'ramda'
 import * as T from '../types'
 
@@ -24,6 +25,26 @@ function create (dev: T.Dev) {
   })
 }
 
+async function update (id: number, dev) {
+  const data: Prisma.DevUpdateWithoutProjectsInput = {
+    skills: {
+      update: dev.skills,
+    }
+  }
+  const updateRes = await prisma.dev.update({
+    where: { id: Number(id) },
+    data,
+  })
+  if (updateRes.id) {
+    return prisma.dev.findUnique({
+      where: { id: updateRes.id },
+      include: {
+        skills: true,
+      }
+    })
+  }
+}
+
 async function del (id: number) {
   const devToDelete = await prisma.dev.findUnique({ where: { id }, select: { skills: true }})
   if (!devToDelete) return Promise.reject(`dev not found`)
@@ -37,4 +58,5 @@ export default {
   get,
   create,
   del,
+  update,
 }
