@@ -1,3 +1,5 @@
+#!/bin/node
+
 const fetch = require(`isomorphic-fetch`)
 const assert = require(`assert`)
 const printRed = str => console.log(`\x1b[31m %s \x1b[37m`, str)
@@ -137,7 +139,7 @@ function runTests () {
      })
      .catch(printRed)
      .finally(_ => {
-       // clean up
+       console.log(`Tear down`)
        testDeleteDev(devId)
      })
 }
