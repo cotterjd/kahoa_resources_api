@@ -3,7 +3,7 @@
 # Getting Started
 `$ git clone git@github.com:cotterjd/kahoa_resources_api.git`<br>
 `$ cd kahoa_resources_api`<br>
-Add .env file with DATABASE_URL value
+Add .env file with DATABASE_URL value<br>
 `$ npm install && npm run dev`<br>
 
 # Running Tests
