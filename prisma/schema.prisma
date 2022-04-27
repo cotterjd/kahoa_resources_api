@@ -10,60 +10,21 @@ datasource db {
 }
 
 model Skill {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
-  dev            Dev      @relation(fields: [devId], references: [id])
-  devId          Int      @unique
-  spring         Int?     @default(0)
-  hibernate      Int?     @default(0)
-  maven          Int?     @default(0)
-  flyway         Int?     @default(0)
-  graphQL        Int?     @default(0)
-  mySQL          Int?     @default(0)
-  pl_sql         Int?     @default(0)
-  postgres       Int?     @default(0)
-  jMeter         Int?     @default(0)
-  python         Int?     @default(0)
-  javaScript     Int?     @default(0)
-  cSharp         Int?     @default(0)
-  php            Int?     @default(0)
-  angular        Int?     @default(0)
-  react          Int?     @default(0)
-  vue            Int?     @default(0)
-  mongoDB        Int?     @default(0)
-  aws            Int?     @default(0)
-  azure          Int?     @default(0)
-  bash           Int?     @default(0)
-  linux          Int?     @default(0)
-  css            Int?     @default(0)
-  typeScript     Int?     @default(0)
-  jQuery         Int?     @default(0)
-  flutter        Int?     @default(0)
-  swift          Int?     @default(0)
-  objectiveC     Int?     @default(0)
-  androidNative  Int?     @default(0)
-  Kotlin         Int?     @default(0)
-  Go             Int?     @default(0)
-  Erlang         Int?     @default(0)
-  reactNative    Int?     @default(0)
-  dynamoDB       Int?     @default(0)
-  node           Int?     @default(0)
-  java           Int?     @default(0)
-  sqlServer      Int?     @default(0)
-  otherLanguages String?  @default("")
+  id   Int     @id @default(autoincrement())
+  name String? @default("")
 }
 
 model Dev {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  email     String   @unique
-  name      String?
-  projects  Project? @relation(fields: [projectId], references: [id])
-  projectId Int?
-  skills    Skill?
-  skillsId  Int?
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  email       String   @unique
+  name        String?
+  projects    Project? @relation(fields: [projectId], references: [id])
+  projectId   Int?
+  skills      Json?
+  otherSkills String?
+  skillsId    Int?
 }
 
 model Project {

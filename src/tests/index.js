@@ -44,24 +44,7 @@ const testListDevs = () => {
      }).then(r => r.json()).then(resolve).catch(reject) 
   })
 }
-const testBadPut = (id) => {
-  console.log(`Testing PUT /devs`)
-  return new Promise((resolve, reject) => {
-     fetch(`http://localhost:4000/devs/foo`, {
-       method: `PUT`,
-       headers: {
-         'Content-Type': `application/json`,
-       },
-       body: JSON.stringify({
-         skills: {
-           python: 3
-         }
-       }),
-     }).then(r => r.json()).then(resolve).catch(reject) 
-  })
-}
-const testPutDev = (id) => {
-  console.log(`Testing PUT /devs`)
+const testPut = (id) => {
   return new Promise((resolve, reject) => {
      fetch(`http://localhost:4000/devs/${id}`, {
        method: `PUT`,
@@ -69,12 +52,20 @@ const testPutDev = (id) => {
          'Content-Type': `application/json`,
        },
        body: JSON.stringify({
-         skills: {
+         skills: JSON.stringify({
            python: 3
-         }
+         })
        }),
      }).then(r => r.json()).then(resolve).catch(reject) 
   })
+}
+const testBadPut = (id) => {
+  console.log(`Testing PUT /devs`)
+  return testPut(`foo`) 
+}
+const testPutDev = (id) => {
+  console.log(`Testing PUT /devs`)
+  return testPut(id) 
 }
 const testDeleteDev = (id) => {
   console.log(`Testing DELETE /devs`)
@@ -128,7 +119,8 @@ function runTests () {
        // console.log(updatedDev)
        assert.ok(updatedDev.id)
        assert.ok(updatedDev.skills)
-       assert.equal(updatedDev.skills.python, 3)
+       const skills = JSON.parse(updatedDev.skills)
+       assert.equal(skills.python, 3)
        printGreen(`passed`)
      })
      .then(_ => testDeleteDev(devId))

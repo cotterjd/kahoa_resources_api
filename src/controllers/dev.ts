@@ -8,7 +8,6 @@ const prisma = new PrismaClient()
 function get () {
   return prisma.dev.findMany({
     include: {
-      skills: true,
       projects: true,
     }
   })  
@@ -27,9 +26,7 @@ function create (dev: T.Dev) {
 
 async function update (id: number, dev) {
   const data: Prisma.DevUpdateWithoutProjectsInput = {
-    skills: {
-      update: dev.skills,
-    }
+    skills: dev.skills,
   }
   const updateRes = await prisma.dev.update({
     where: { id: Number(id) },
@@ -38,9 +35,6 @@ async function update (id: number, dev) {
   if (updateRes.id) {
     return prisma.dev.findUnique({
       where: { id: updateRes.id },
-      include: {
-        skills: true,
-      }
     })
   }
 }
@@ -50,7 +44,6 @@ async function del (id: number) {
   if (!devToDelete) return Promise.reject(`dev not found`)
   // console.log(`MYDEV`, devToDelete)
 
-  await prisma.skill.delete({ where: { id: devToDelete.skills.id }})
   return prisma.dev.delete({ where: { id }})
 }
 
