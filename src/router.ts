@@ -12,5 +12,6 @@ router.route('/devs').get(controller.dev.list)
 router.route('/devs/:id').put(controller.dev.update)
 router.route('/devs/:id').delete(controller.dev.del)
 
+router.route('/login').post(controller.auth.login)
 
-export default router 
+export default router
